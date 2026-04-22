@@ -749,10 +749,15 @@
         method: "POST",
         headers: { "Content-Type": "text/plain" },
         body: JSON.stringify(data),
-        mode: "no-cors",
+        redirect: "follow",
       });
 
-      showSuccess();
+      const result = await resp.text();
+      if (resp.ok) {
+        showSuccess();
+      } else {
+        throw new Error("伺服器回應錯誤：" + result);
+      }
     } catch (err) {
       console.error("Submit error:", err);
       alert("送出失敗，請稍後再試或聯繫客服。");

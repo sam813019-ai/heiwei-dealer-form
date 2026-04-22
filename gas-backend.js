@@ -67,6 +67,13 @@ function doPost(e) {
   }
 }
 
+// CORS preflight 支援
+function doOptions(e) {
+  return ContentService
+    .createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
 // 瀏覽器訪問 Web App URL 時自動初始化標題列
 function doGet(e) {
   try {
