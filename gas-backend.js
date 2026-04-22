@@ -4,7 +4,7 @@
 // ════════════════════════════════════════════════════
 
 const SHEET_ID   = "1QM2YLU0uRGzxmKva9JD_L0ZkFfoSr5TkC_xBUE2Z8C0";
-const SHEET_NAME = "工作表1";   // 如果你的分頁名稱不同，請修改這裡
+const SHEET_NAME = "授權書申請";
 
 // 欄位標題（第一次執行時會自動建立）
 const HEADERS = [
@@ -29,7 +29,7 @@ function doPost(e) {
     const data = JSON.parse(raw);
 
     const ss    = SpreadsheetApp.openById(SHEET_ID);
-    const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+    const sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
 
     // 建立標題列（若第一列是空的）
     if (sheet.getLastRow() === 0 || sheet.getRange(1, 1).getValue() === "") {
@@ -81,10 +81,16 @@ function doGet(e) {
   }
 }
 
-// 建立標題列（可在編輯器直接執行，或透過 doGet 觸發）
+// 建立「授權書申請」工作表並初始化標題列
 function setupSheet() {
-  const ss    = SpreadsheetApp.openById(SHEET_ID);
-  const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+
+  // 取得或新增工作表
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    Logger.log("✅ 新工作表「" + SHEET_NAME + "」已建立");
+  }
 
   // 已有標題就不重複寫
   if (sheet.getLastRow() > 0 && sheet.getRange(1, 1).getValue() !== "") {
@@ -99,8 +105,6 @@ function setupSheet() {
              .setFontColor("#FFFFFF")
              .setHorizontalAlignment("center");
   sheet.setFrozenRows(1);
-
-  // 自動調整欄寬
   sheet.autoResizeColumns(1, HEADERS.length);
 
   Logger.log("✅ 標題列建立完成：" + HEADERS.length + " 欄");
