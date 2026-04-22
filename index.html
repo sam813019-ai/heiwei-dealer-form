@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>HEIWEI 何謂美 — 經銷授權申請</title>
+  <script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+  <style>
+    :root {
+      --gold: #C4A45A;
+      --gold-light: #E8D5A3;
+      --dark: #1A1A1A;
+      --gray: #4A4A4A;
+      --light-gray: #F5F3EF;
+      --border: #DDD8CF;
+      --white: #FFFFFF;
+      --error: #C0392B;
+      --success: #27AE60;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+      background: var(--light-gray);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--dark);
+      padding: 20px 24px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-brand {
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .header-title {
+      color: var(--white);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .header-sub {
+      color: var(--gold-light);
+      font-size: 12px;
+      margin-top: 4px;
+      opacity: 0.8;
+    }
+
+    /* ── Profile Bar ── */
+    .profile-bar {
+      background: #252525;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #333;
+    }
+
+    .profile-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      object-fit: cover;
+    }
+
+    .profile-avatar-placeholder {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 14px;
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-name {
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .profile-id {
+      color: #888;
+      font-size: 10px;
+      margin-top: 1px;
+      font-family: monospace;
+    }
+
+    .profile-badge {
+      background: var(--gold);
+      color: var(--dark);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Content ── */
+    .content {
+      padding: 20px 16px 40px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .notice {
+      background: #FFF8EC;
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .notice strong {
+      color: var(--dark);
+    }
+
+    /* ── Form ── */
+    .form-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    label .req {
+      color: var(--error);
+      margin-left: 2px;
+    }
+
+    label .hint {
+      font-weight: 400;
+      color: #888;
+      font-size: 11px;
+      display: block;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--dark);
+      background: var(--white);
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    input.error,
+    textarea.error {
+      border-color: var(--error);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 11px;
+      margin-top: 4px;
+      display: none;
+    }
+
+    /* ── Platform Checkboxes ── */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .platform-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--light-gray);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .platform-item:has(input:checked) {
+      background: #FFF8EC;
+      border-color: var(--gold);
+    }
+
+    .platform-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .platform-item span {
+      font-size: 13px;
+      color: var(--dark);
+      line-height: 1.3;
+    }
+
+    .platform-other {
+      grid-column: 1 / -1;
+    }
+
+    .platform-other-input {
+      margin-top: 8px;
+    }
+
+    /* ── LINE ID Field (read-only) ── */
+    .readonly-field {
+      background: var(--light-gray) !important;
+      color: #888 !important;
+      cursor: not-allowed;
+    }
+
+    /* ── Submit Button ── */
+    .submit-area {
+      margin-top: 24px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: var(--gold);
+      color: var(--dark);
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-submit .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(26,26,26,0.3);
+      border-top-color: var(--dark);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .btn-submit.loading .spinner {
+      display: block;
+    }
+
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    .form-footer {
+      text-align: center;
+      font-size: 11px;
+      color: #AAA;
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Success Screen ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 36px;
+    }
+
+    .success-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .success-sub {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    /* ── Loading Overlay ── */
+    #loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .loading-brand {
+      color: var(--gold);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+
+    .loading-sub {
+      color: #666;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+
+    .loading-bar {
+      width: 120px;
+      height: 2px;
+      background: #333;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .loading-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      animation: loading 1.2s ease-in-out infinite;
+    }
+
+    @keyframes loading {
+      0% { width: 0; margin-left: 0; }
+      50% { width: 80px; margin-left: 20px; }
+      100% { width: 0; margin-left: 120px; }
+    }
+
+    /* ── Error Screen ── */
+    .error-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .error-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--error);
+      margin-bottom: 8px;
+    }
+
+    .error-desc {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay">
+  <div class="loading-brand">HEIWEI</div>
+  <div class="loading-sub">何謂美</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-brand">HEIWEI 何謂美</div>
+  <div class="header-title">經銷授權申請表</div>
+  <div class="header-sub">Dealer Authorization Application</div>
+</div>
+
+<!-- Profile Bar -->
+<div class="profile-bar">
+  <div class="profile-avatar-placeholder" id="profile-avatar-placeholder">👤</div>
+  <img id="profile-avatar" class="profile-avatar" style="display:none" src="" alt="" />
+  <div class="profile-info">
+    <div class="profile-name" id="profile-name">讀取中...</div>
+    <div class="profile-id" id="profile-id-display"></div>
+  </div>
+  <div class="profile-badge">LINE 驗證</div>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+
+  <!-- Error Screen -->
+  <div class="error-screen" id="error-screen">
+    <div class="error-icon">⚠️</div>
+    <div class="error-title">請透過 LINE 開啟</div>
+    <div class="error-desc">此頁面需在 LINE App 內開啟，<br>請透過 HEIWEI 官方帳號連結進入。</div>
+  </div>
+
+  <!-- Success Screen -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">✓</div>
+    <div class="success-title">申請已送出！</div>
+    <div class="success-sub">
+      感謝您申請 HEIWEI 何謂美 經銷授權。<br>
+      我們將於 3–5 個工作天內，<br>
+      透過 LINE 或電子郵件與您聯繫。<br><br>
+      <strong>請勿重複送出表單。</strong>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form id="dealer-form">
+
+    <div class="notice">
+      <strong>填寫須知：</strong>資料將用於建立官方授權書，請確認填寫資訊真實有效。
+      若有多管道銷售，<strong>主要經營平台請全部勾選</strong>，將一併標示於授權書。
+    </div>
+
+    <!-- Section 1: 基本資料 -->
+    <div class="form-card">
+      <div class="card-title">基本資料</div>
+
+      <div class="form-group">
+        <label>
+          代理姓名 / 公司全銜 <span class="req">*</span>
+        </label>
+        <input type="text" name="company_name" id="company_name"
+               placeholder="例：何謂美精品美容有限公司 / 陳○○" required />
+        <div class="error-msg" id="err-company_name">請填寫此欄位</div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          身份證字號 / 統一編號 <span class="req">*</span>
+          <span class="hint">個人填寫身份證字號，公司填寫統一編號</span>
+        </label>
+        <input type="text" name="id_number" id="id_number"
+               placeholder="例：A123456789 / 12345678" required />
+        <div class="error-msg" id="err-id_number">請填寫此欄位</div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          負責人姓名 <span class="req">*</span>
+        </label>
+        <input type="text" name="owner_name" id="owner_name"
+               placeholder="請填寫負責人真實姓名" required />
+        <div class="error-msg" id="err-owner_name">請填寫此欄位</div>
+      </div>
+    </div>
+
+    <!-- Section 2: 聯絡資料 -->
+    <div class="form-card">
+      <div class="card-title">聯絡資料</div>
+
+      <div class="form-group">
+        <label>
+          聯繫電話 <span class="req">*</span>
+        </label>
+        <input type="tel" name="phone" id="phone"
+               placeholder="例：0912-345-678" required />
+        <div class="error-msg" id="err-phone">請填寫此欄位</div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          電子郵件 <span class="req">*</span>
+          <span class="hint">用於寄送電子授權書、發票及官方通知</span>
+        </label>
+        <input type="email" name="email" id="email"
+               placeholder="example@gmail.com" required />
+        <div class="error-msg" id="err-email">請填寫有效的電子郵件</div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          公司 / 通訊地址 <span class="req">*</span>
+        </label>
+        <input type="text" name="address" id="address"
+               placeholder="例：高雄市仁武區○○路○○號" required />
+        <div class="error-msg" id="err-address">請填寫此欄位</div>
+      </div>
+    </div>
+
+    <!-- Section 3: 經營資料 -->
+    <div class="form-card">
+      <div class="card-title">經營資料</div>
+
+      <div class="form-group">
+        <label>
+          主要經營平台 <span class="req">*</span>
+          <span class="hint">有多管道銷售請全部勾選，將標示於官方授權書</span>
+        </label>
+        <div class="platform-grid">
+          <label class="platform-item">
+            <input type="checkbox" name="platforms" value="實體店面" />
+            <span>🏪 實體店面</span>
+          </label>
+          <label class="platform-item">
+            <input type="checkbox" name="platforms" value="自架官網" />
+            <span>🌐 自架官網</span>
+          </label>
+          <label class="platform-item">
+            <input type="checkbox" name="platforms" value="蝦皮" />
+            <span>🛍 蝦皮</span>
+          </label>
+          <label class="platform-item">
+            <input type="checkbox" name="platforms" value="社群團購" />
+            <span>👥 社群團購</span>
+          </label>
+          <label class="platform-item">
+            <input type="checkbox" name="platforms" value="LINE購物" />
+            <span>💚 LINE 購物</span>
+          </label>
+          <label class="platform-item">
+            <input type="checkbox" name="platforms" value="Instagram" />
+            <span>📸 Instagram</span>
+          </label>
+          <label class="platform-item">
+            <input type="checkbox" name="platforms" value="Facebook" />
+            <span>📘 Facebook</span>
+          </label>
+          <label class="platform-item platform-other">
+            <input type="checkbox" name="platforms" value="其他" id="platform-other-check" />
+            <span>➕ 其他</span>
+          </label>
+        </div>
+        <input type="text" id="platform-other-input" name="platform_other"
+               class="platform-other-input" placeholder="請填寫其他平台名稱"
+               style="display:none" />
+        <div class="error-msg" id="err-platforms">請至少選擇一個平台</div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          平台賣場連結
+          <span class="hint">供審核經營風格是否符合品牌形象（可填多個，換行分隔）</span>
+        </label>
+        <textarea name="platform_links" id="platform_links"
+                  placeholder="https://shopee.tw/yourshop&#10;https://www.instagram.com/yourpage"></textarea>
+      </div>
+    </div>
+
+    <!-- Section 4: 貨源與 LINE -->
+    <div class="form-card">
+      <div class="card-title">貨源與 LINE 資料</div>
+
+      <div class="form-group">
+        <label>
+          上級代理 / 貨源 LINE ID <span class="req">*</span>
+          <span class="hint">若直接向 HEIWEI 官方進貨，請填寫「官方」</span>
+        </label>
+        <input type="text" name="upstream_line_id" id="upstream_line_id"
+               placeholder="例：heiwei_official / @yourdealer" required />
+        <div class="error-msg" id="err-upstream_line_id">請填寫此欄位</div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          申請人 LINE ID <span class="req">*</span>
+        </label>
+        <input type="text" name="applicant_line_id" id="applicant_line_id"
+               placeholder="例：@yourlineid" required />
+        <div class="error-msg" id="err-applicant_line_id">請填寫此欄位</div>
+      </div>
+
+      <div class="form-group">
+        <label>LINE User ID（自動取得）</label>
+        <input type="text" id="line_uid_display" class="readonly-field"
+               value="讀取中..." readonly />
+        <input type="hidden" name="line_uid" id="line_uid" />
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <button type="submit" class="btn-submit" id="btn-submit">
+        送出申請
+        <div class="spinner"></div>
+      </button>
+      <div class="form-footer">
+        送出即表示您同意 HEIWEI 何謂美蒐集上述資料，<br>
+        用於經銷授權審核及後續聯繫。<br>
+        若有多層代理，請請您的下游代理也完成此申請並填寫您的 LINE ID。
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  // ── 請替換為您的實際設定值 ──
+  const LIFF_ID = "2000280599-mBf2n4S6";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbyCJ_siad6BSossakeAbO_kvbzyu2JNCQbak-qFkeAfElLzuabObjxxRZfWWxE85Ufc/exec";
+  // ─────────────────────────────
+
+  let lineProfile = null;
+
+  async function initLiff() {
+    try {
+      await liff.init({ liffId: LIFF_ID });
+
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return;
+      }
+
+      lineProfile = await liff.getProfile();
+      renderProfile(lineProfile);
+
+    } catch (err) {
+      console.error("LIFF init error:", err);
+      showErrorScreen();
+    } finally {
+      document.getElementById("loading-overlay").style.display = "none";
+    }
+  }
+
+  function renderProfile(profile) {
+    document.getElementById("profile-name").textContent = profile.displayName;
+    document.getElementById("profile-id-display").textContent = "UID: " + profile.userId;
+    document.getElementById("line_uid").value = profile.userId;
+    document.getElementById("line_uid_display").value = profile.userId;
+
+    if (profile.pictureUrl) {
+      const img = document.getElementById("profile-avatar");
+      img.src = profile.pictureUrl;
+      img.style.display = "block";
+      document.getElementById("profile-avatar-placeholder").style.display = "none";
+    }
+  }
+
+  function showErrorScreen() {
+    document.getElementById("error-screen").style.display = "block";
+    document.getElementById("dealer-form").style.display = "none";
+  }
+
+  // ── Platform other toggle ──
+  document.getElementById("platform-other-check").addEventListener("change", function () {
+    const otherInput = document.getElementById("platform-other-input");
+    otherInput.style.display = this.checked ? "block" : "none";
+    if (!this.checked) otherInput.value = "";
+  });
+
+  // ── Form Validation & Submit ──
+  document.getElementById("dealer-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    const btn = document.getElementById("btn-submit");
+    btn.classList.add("loading");
+    btn.disabled = true;
+
+    const data = collectFormData();
+
+    try {
+      const resp = await fetch(GAS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(data),
+        mode: "no-cors",
+      });
+
+      showSuccess();
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("送出失敗，請稍後再試或聯繫客服。");
+      btn.classList.remove("loading");
+      btn.disabled = false;
+    }
+  });
+
+  function collectFormData() {
+    const fd = new FormData(document.getElementById("dealer-form"));
+
+    const platforms = Array.from(document.querySelectorAll('input[name="platforms"]:checked'))
+      .map(el => el.value);
+    const otherPlatform = fd.get("platform_other");
+    if (otherPlatform) platforms.push("其他：" + otherPlatform);
+
+    return {
+      submitted_at: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+      line_uid: fd.get("line_uid"),
+      line_display_name: lineProfile ? lineProfile.displayName : "",
+      company_name: fd.get("company_name"),
+      id_number: fd.get("id_number"),
+      owner_name: fd.get("owner_name"),
+      phone: fd.get("phone"),
+      email: fd.get("email"),
+      address: fd.get("address"),
+      platforms: platforms.join("、"),
+      platform_links: fd.get("platform_links"),
+      upstream_line_id: fd.get("upstream_line_id"),
+      applicant_line_id: fd.get("applicant_line_id"),
+    };
+  }
+
+  function validateForm() {
+    let valid = true;
+
+    const required = [
+      "company_name", "id_number", "owner_name",
+      "phone", "email", "address",
+      "upstream_line_id", "applicant_line_id"
+    ];
+
+    required.forEach(name => {
+      const el = document.getElementById(name);
+      const errEl = document.getElementById("err-" + name);
+      if (!el.value.trim()) {
+        el.classList.add("error");
+        if (errEl) errEl.style.display = "block";
+        valid = false;
+      } else {
+        el.classList.remove("error");
+        if (errEl) errEl.style.display = "none";
+      }
+    });
+
+    // Email format
+    const emailEl = document.getElementById("email");
+    if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+      emailEl.classList.add("error");
+      document.getElementById("err-email").style.display = "block";
+      valid = false;
+    }
+
+    // At least one platform
+    const checkedPlatforms = document.querySelectorAll('input[name="platforms"]:checked');
+    const platformErr = document.getElementById("err-platforms");
+    if (checkedPlatforms.length === 0) {
+      platformErr.style.display = "block";
+      valid = false;
+    } else {
+      platformErr.style.display = "none";
+    }
+
+    if (!valid) {
+      document.querySelector(".error-msg[style='display: block;']")
+        ?.closest(".form-card")
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    return valid;
+  }
+
+  function showSuccess() {
+    document.querySelector(".notice").style.display = "none";
+    document.getElementById("dealer-form").style.display = "none";
+    const s = document.getElementById("success-screen");
+    s.style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ── Init ──
+  initLiff();
+</script>
+</body>
+</html>
