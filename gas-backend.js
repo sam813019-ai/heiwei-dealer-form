@@ -67,7 +67,46 @@ function doPost(e) {
   }
 }
 
-// 測試用：在 Apps Script 編輯器直接執行這個函式可檢查連線
+// 瀏覽器訪問 Web App URL 時自動初始化標題列
+function doGet(e) {
+  try {
+    setupSheet();
+    return ContentService
+      .createTextOutput("✅ HEIWEI 授權書申請頁面標題列已建立完成！")
+      .setMimeType(ContentService.MimeType.TEXT);
+  } catch (err) {
+    return ContentService
+      .createTextOutput("❌ 錯誤：" + err.toString())
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+}
+
+// 建立標題列（可在編輯器直接執行，或透過 doGet 觸發）
+function setupSheet() {
+  const ss    = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+
+  // 已有標題就不重複寫
+  if (sheet.getLastRow() > 0 && sheet.getRange(1, 1).getValue() !== "") {
+    Logger.log("標題列已存在，略過。");
+    return;
+  }
+
+  sheet.appendRow(HEADERS);
+  const headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
+  headerRange.setFontWeight("bold")
+             .setBackground("#C4A45A")
+             .setFontColor("#FFFFFF")
+             .setHorizontalAlignment("center");
+  sheet.setFrozenRows(1);
+
+  // 自動調整欄寬
+  sheet.autoResizeColumns(1, HEADERS.length);
+
+  Logger.log("✅ 標題列建立完成：" + HEADERS.length + " 欄");
+}
+
+// 測試連線用
 function testWrite() {
   const ss    = SpreadsheetApp.openById(SHEET_ID);
   const sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
