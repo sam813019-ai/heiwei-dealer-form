@@ -745,19 +745,13 @@
     const data = collectFormData();
 
     try {
-      // 用 GET + query string，避免 GAS 302 redirect 吃掉 POST body
+      // GET + query string + no-cors：GAS 仍會收到並寫入，瀏覽器不讀回應避免 CORS 錯誤
       const params = new URLSearchParams();
       Object.entries(data).forEach(([k, v]) => params.append(k, v ?? ""));
       const url = GAS_URL + "?" + params.toString();
 
-      const resp = await fetch(url, { method: "GET", redirect: "follow" });
-      const result = await resp.text();
-
-      if (resp.ok) {
-        showSuccess();
-      } else {
-        throw new Error("伺服器回應錯誤：" + result);
-      }
+      await fetch(url, { method: "GET", mode: "no-cors" });
+      showSuccess();
     } catch (err) {
       console.error("Submit error:", err);
       alert("送出失敗，請稍後再試或聯繫客服。");
