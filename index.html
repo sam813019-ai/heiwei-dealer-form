@@ -745,14 +745,14 @@
     const data = collectFormData();
 
     try {
-      const resp = await fetch(GAS_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(data),
-        redirect: "follow",
-      });
+      // 用 GET + query string，避免 GAS 302 redirect 吃掉 POST body
+      const params = new URLSearchParams();
+      Object.entries(data).forEach(([k, v]) => params.append(k, v ?? ""));
+      const url = GAS_URL + "?" + params.toString();
 
+      const resp = await fetch(url, { method: "GET", redirect: "follow" });
       const result = await resp.text();
+
       if (resp.ok) {
         showSuccess();
       } else {

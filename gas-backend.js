@@ -74,18 +74,61 @@ function doOptions(e) {
     .setMimeType(ContentService.MimeType.TEXT);
 }
 
-// 瀏覽器訪問 Web App URL 時自動初始化標題列
+// 處理表單送出（GET + query string）和初始化
 function doGet(e) {
   try {
+    const p = e.parameter || {};
+
+    // 有 submitted_at 就是表單送出
+    if (p.submitted_at) {
+      return writeRow(p);
+    }
+
+    // 沒有參數就是初始化請求
     setupSheet();
     return ContentService
       .createTextOutput("✅ HEIWEI 授權書申請頁面標題列已建立完成！")
       .setMimeType(ContentService.MimeType.TEXT);
+
   } catch (err) {
     return ContentService
-      .createTextOutput("❌ 錯誤：" + err.toString())
-      .setMimeType(ContentService.MimeType.TEXT);
+      .createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+function writeRow(data) {
+  const ss    = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
+
+  // 建立標題列（若第一列是空的）
+  if (sheet.getLastRow() === 0 || sheet.getRange(1, 1).getValue() === "") {
+    sheet.appendRow(HEADERS);
+    const hr = sheet.getRange(1, 1, 1, HEADERS.length);
+    hr.setFontWeight("bold").setBackground("#C4A45A").setFontColor("#FFFFFF").setHorizontalAlignment("center");
+    sheet.setFrozenRows(1);
+    sheet.autoResizeColumns(1, HEADERS.length);
+  }
+
+  sheet.appendRow([
+    data.submitted_at      || "",
+    data.line_uid          || "",
+    data.line_display_name || "",
+    data.company_name      || "",
+    data.id_number         || "",
+    data.owner_name        || "",
+    data.phone             || "",
+    data.email             || "",
+    data.address           || "",
+    data.platforms         || "",
+    data.platform_links    || "",
+    data.upstream_line_id  || "",
+    data.applicant_line_id || "",
+  ]);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ status: "ok" }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // 建立「授權書申請」工作表並初始化標題列
